@@ -1,0 +1,35 @@
+{{#extend "layout"}}
+
+  {{#content content}}
+      <!-- Jumbotron -->
+      <div class="jumbotron">
+        <h1><span class="text-hide">Gulp<span><img class="logo" src="/img/gulp-white-text.svg"></h1>
+        <p class="lead">用自动化构建工具增强你的工作流程！</p>
+        <p><a class="btn btn-lg btn-success" href="/docs/getting-started/" role="button">开始使用</a></p>
+      </div>
+
+      <div class="benefits container">
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="col-md-6">
+            <h2>易于使用</h2>
+            <p>通过代码优于配置的策略，Gulp让简单的任务简单，复杂的任务可管理。</p>
+          </div>
+          <div class="col-md-6">
+            <h2>构建快速</h2>
+            <p>利用node流的威力，你可以快速构建项目并减少频繁的 IO 操作。</p>
+         </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <h2>插件高质</h2>
+            <p>gulp严格的插件指南确保插件如你期望的那样简洁高质得工作。</p>
+          </div>
+          <div class="col-md-6">
+            <h2>易于学习</h2>
+            <p>通过最少的API，掌握Gulp毫不费力，构建工作尽在掌握：如同一系列流管道。</p>
+          </div>
+        </div>
+      </div>
+  {{/content}}
+{{/extend}}
