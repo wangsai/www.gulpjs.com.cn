@@ -1,98 +1,106 @@
-# gulp API文档 #
+## gulp API 文档
 
-## gulp.src(globs[,options]) ##
+### gulp.src(globs[, options])
 
-发出文件匹配提供的glob或者一个glob数组。返回一个可以传输到插件的Vinyl文件流。
+Emits files matching provided glob or an array of globs. 
+Returns a [stream](http://nodejs.org/api/stream.html) of [Vinyl files](https://github.com/wearefractal/vinyl-fs) 
+that can be [piped](http://nodejs.org/api/stream.html#stream_readable_pipe_destination_options) 
+to plugins.
 
-	gulp.src('client/templates/*.jade')
-	  .pipe(jade())
-	  .pipe(minify())
-	  .pipe(gulp.dest('build/minified_templates'));
+```javascript
+gulp.src('client/templates/*.jade')
+  .pipe(jade())
+  .pipe(minify())
+  .pipe(gulp.dest('build/minified_templates'));
+```
 
-glob指的是 node-glob语法或者可以是一个文件的绝对路径。
+`glob` 可以是 [node-glob 语法](https://github.com/isaacs/node-glob) 或者也可以直接就是一个路径。
 
-### globs ###
+#### globs
 
-类型：string 或者 array
+类型：`String` 或者 `Array`
 
-显示glob或者globs数组。
+单个 glob 或者 glob 数组。
 
-### options ###
+#### options
 
-类型：object
+类型：`Object`
 
-通过glob-stream传送到node-glob的对象。
+通过 [glob-stream] 传送到 [node-glob] 的参数对象。
 
-gulp除了有node-glob和glob-stream支持的选项之外还额外增加了两个选项：
+gulp 除了支持 [node-glob 支持的参数][node-glob documentation] 和 [glob-stream] 支持的参数外，还额外增加了一些参数：
 
-### options.buffer ###
+#### options.buffer
+类型：`Boolean`
+默认值：`true`
 
-类型：boolean  
-默认值：true
+当把这属性设置成 `false` 时，返回的 `file.contents` 将是一个数据流而不是缓冲文件。当在文件非常大时，这个属性非常有用。**注意：** 某些插件可能没有实现对数据流的支持。
 
-当把这属性设置成false时，返回的file.contents会是一个数据流而不是缓冲文件。当在文件非常大时，这个属性非常有用。**注意：** 插件可能没有实现对数据流的支持。
+#### options.read
+Type: `Boolean`
+Default: `true`
 
-### options.read ###
+当把这个属性设置成 `false` 时，`file.contents` 返回的将是 null 并且根本不去读取文件。
 
-类型：boolean 默认值：true
+#### options.base
+Type: `String`
+默认值：glob 模式匹配串之前的所有内容（见 [glob2base]）
 
-当把这个属性设置成false时，file.contents会返回null并且不能读取文件。
+例如，`client/js/somedir` 目录中的 `somefile.js` ：
 
-### options.base ###
+```js
+gulp.src('client/js/**/*.js') // 匹配 'client/js/somedir/somefile.js' ，并且将 `base` 设置为 `client/js/`
+  .pipe(minify())
+  .pipe(gulp.dest('build'));  // 写入文件 'build/somedir/somefile.js'
 
-类型：string 默认值：glob启动前的所有内容（看 glob2base）
+gulp.src('client/js/**/*.js', { base: 'client' })
+  .pipe(minify())
+  .pipe(gulp.dest('build'));  // 写入文件 'build/js/somedir/somefile.js'
+```
 
-例如，看 clien/js/somedir中的somefile.js文件：
+### gulp.dest(path[, options])
 
-	gulp.src('client/js/**/*.js') // Matches 'client/js/somedir/somefile.js' and resolves `base` to `client/js/`
-	  .pipe(minify())
-	  .pipe(gulp.dest('build'));  // Writes 'build/somedir/somefile.js'
-	
-	gulp.src('client/js/**/*.js', { base: 'client' })
-	  .pipe(minify())
-	  .pipe(gulp.dest('build'));  // Writes 'build/js/somedir/somefile.js'
+可以作为管道（pipe）传输或者写入生成。将传输进来的数据重新发出（emit）出去就可以通过管道（pipe）输出到多个文件夹。不存在的文件夹会被创建。
 
-## gulp.dest(path[,options]) ##
+```javascript
+gulp.src('./client/templates/*.jade')
+  .pipe(jade())
+  .pipe(gulp.dest('./build/templates'))
+  .pipe(minify())
+  .pipe(gulp.dest('./build/minified_templates'));
+```
 
-可以被传输并且会生成文件。反复发出数据给它，所以你可以传输多个文件夹。不存在的文件夹会被创建。
+文件路径是将给定的目标目录和文件相对路径合并后计出的新路径。相对路径是在文件的基础路径的基础上计算得到的。查看上面的 `gulp.src` 以获取更多信息。
 
-	gulp.src('./client/templates/*.jade')
-	  .pipe(jade())
-	  .pipe(gulp.dest('./build/templates'))
-	  .pipe(minify())
-	  .pipe(gulp.dest('./build/minified_templates'));
+#### path
+Type: `String` 或者 `Function`
 
-书写路径是计算添加文件的相对路径到目标目录。相对路径是在文件的基础路径的基础上计算的。查看以上的gulp.sec获取更多信息。
+输出文件的目标路径（或目录）。或者是一个 function 返回的路径，function 将接收一个 [vinyl 文件实例](https://github.com/wearefractal/vinyl) 作为参数。
 
-### path ###
+#### options
+Type: `Object`
 
-类型：string或者function
+#### options.cwd
+Type: `String`
+Default: `process.cwd()`
 
-所需要生成文件的路径（输出路径）。或者是返回一个function，function会提供一个vinyl文件实例。
+`cwd` 用于计算输出目录的，只有提供的输出目录是相对路径时此参数才有用。
 
-### options ###
+#### options.mode
+Type: `String`
+Default: `0777`
 
-类型：object
+8进制数字组成的字符串，用于为创建的输出目录指定权限。
 
-### options.cwd ###
+### gulp.task(name[, deps], fn)
 
-类型：string 默认值：process.cwd()
+定义一个使用 [Orchestrator] 的任务。
 
-cwd是输出文件夹，只有提供的输出文件夹是相对的才有效。
-
-### options.mode ###
-
-类型：string 默认值：0777
-
-任何一个文件夹的八进制字符说明mode都需要作为输出文件夹。
-
-## gulp.task(name[,deps],fn) ##
-
-定义一个任务使用Orchestrator。
-
-	gulp.task('somename', function() {
-	  // Do stuff
-	});
+```js
+gulp.task('somename', function() {
+  // Do stuff
+});
+```
 
 ### name ###
 
