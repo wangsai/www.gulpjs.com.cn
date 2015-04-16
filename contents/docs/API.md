@@ -138,7 +138,7 @@ gulp.task('jekyll', function(cb) {
 });
 ```
 
-##### 返回一个流（stream）
+##### 返回一个数据流（stream）
 
 ```js
 gulp.task('somename', function() {
@@ -173,7 +173,7 @@ gulp.task('somename', function() {
 
 举个例子，我们假定你有两个任务，"one" 和 "two"，你希望他们按照以下的顺序执行：
 
-1. 在任务 "one" 中添加一个提示告诉 gulp 此任务何时完成。可以选择接收一个回调函数并在任务执行完毕后调用此回调函数；也可以返回一个 promise 对象或者一个流（stream），然后由 gulp 等待 promise 被处理（resolve）或者流（stream）结束。
+1. 在任务 "one" 中添加一个提示告诉 gulp 此任务何时完成。可以选择接收一个回调函数并在任务执行完毕后调用此回调函数；也可以返回一个 promise 对象或者一个数据流（stream），然后由 gulp 等待 promise 被处理（resolve）或者数据流（stream）结束。
 
 2. 为任务 "two" 添加一个提示，告诉 gulp 该任务须在第一个任务执行完毕后才能执行。
 
