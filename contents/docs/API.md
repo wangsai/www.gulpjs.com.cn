@@ -2,10 +2,8 @@
 
 ### gulp.src(globs[, options])
 
-Emits files matching provided glob or an array of globs. 
-Returns a [stream](http://nodejs.org/api/stream.html) of [Vinyl files](https://github.com/wearefractal/vinyl-fs) 
-that can be [piped](http://nodejs.org/api/stream.html#stream_readable_pipe_destination_options) 
-to plugins.
+分发（emit）匹配 glob（模式匹配） 或 glob 数组的文件。
+返回一个 [Vinyl files](https://github.com/wearefractal/vinyl-fs) 类型的 [stream](http://nodejs.org/api/stream.html)，可以通过 [管道（pipe）](http://nodejs.org/api/stream.html#stream_readable_pipe_destination_options) 传递给插件。
 
 ```javascript
 gulp.src('client/templates/*.jade')
@@ -73,7 +71,7 @@ gulp.src('./client/templates/*.jade')
 文件路径是将给定的目标目录和文件相对路径合并后计出的新路径。相对路径是在文件的基础路径的基础上计算得到的。查看上面的 `gulp.src` 以获取更多信息。
 
 #### path
-Type: `String` 或者 `Function`
+类型：`String` 或者 `Function`
 
 输出文件的目标路径（或目录）。或者是一个 function 返回的路径，function 将接收一个 [vinyl 文件实例](https://github.com/wearefractal/vinyl) 作为参数。
 
@@ -102,158 +100,170 @@ gulp.task('somename', function() {
 });
 ```
 
-### name ###
+#### name
 
-任务的名字。你想从命令行运行的任务中间不应该存在空格。
+任务的名字。从命令行运行任务时，任务名的中间不能存在空格。
 
-### deps ###
+#### deps
+类型：`Array`
 
-类型：array
+此数组中列出的所有从属任务将在你的任务执行前执行并执行完毕。
 
-一个包含了在你的任务运行前即将实行和完成的任务数组。
+```js
+gulp.task('mytask', ['array', 'of', 'task', 'names'], function() {
+  // Do stuff
+});
 
-	gulp.task('mytask', ['array', 'of', 'task', 'names'], function() {
-	  // Do stuff
-	});
+**注意：** 在从属任务完整前，你的任务是否提前执行完毕了？请确保你所依赖的任务是否正确的实现了异步：接收一个回调函数或者返回一个 promise 对象或者事件流（event stream）。
 
-**注意：** 在从属任务完整前，你的任务是否有运行？确认你的从属任务是否正确使用异步，运行提示：接收一个回调函数或者返回一个promise或者事件流。
+#### fn
 
-### fn ###
+此函数用于执行任务。一般形式是 `gulp.src().pipe(someplugin())`。
 
-执行任务运算的功能。一般来说，形式是gulp.src().pipe(someplugin())。
+#### 对异步任务的支持
 
-### Async task support ###
+如果 `fn` 函数是以下形式中的一种，那么此任务可以被设置成异步的：
 
-如果fn是以下中的一个，那么任务可以被设置成异步的：
+##### 接收一个回调函数
 
-#### 接收一个回调函数 ####
+```javascript
+// run a command in a shell
+var exec = require('child_process').exec;
+gulp.task('jekyll', function(cb) {
+  // build Jekyll
+  exec('jekyll build', function(err) {
+    if (err) return cb(err); // return error
+    cb(); // finished task
+  });
+});
+```
 
-	// run a command in a shell
-	var exec = require('child_process').exec;
-	gulp.task('jekyll', function(cb) {
-	  // build Jekyll
-	  exec('jekyll build', function(err) {
-	    if (err) return cb(err); // return error
-	    cb(); // finished task
-	  });
-	});
+##### 返回一个流（stream）
 
-#### 返回一个流 ####
+```js
+gulp.task('somename', function() {
+  var stream = gulp.src('client/**/*.js')
+    .pipe(minify())
+    .pipe(gulp.dest('build'));
+  return stream;
+});
+```
 
-	gulp.task('somename', function() {
-	  var stream = gulp.src('client/**/*.js')
-	    .pipe(minify())
-	    .pipe(gulp.dest('build'));
-	  return stream;
-	});
+##### 返回一个 promise 对象
 
-#### 返回一个promise ####
+```javascript
+var Q = require('q');
 
-	var Q = require('q');
-	
-	gulp.task('somename', function() {
-	  var deferred = Q.defer();
-	
-	  // do async stuff
-	  setTimeout(function() {
-	    deferred.resolve();
-	  }, 1);
-	
-	  return deferred.promise;
-	});
+gulp.task('somename', function() {
+  var deferred = Q.defer();
 
-**注意：** 默认情况下，是在最大的并发情况下运行任务的--例如，它在最开始的时候就发起了所有的任务不再等待其它的。如果你想将任务按照一个特定的顺序进行，你需要做两件事情：
+  // do async stuff
+  setTimeout(function() {
+    deferred.resolve();
+  }, 1);
 
-1.当任务完成时给它一个提示。
+  return deferred.promise;
+});
+```
 
-2.给它一个提示告诉它这个任务是依赖于另外一个任务的。
+**注意：** 默认情况下，任务将被最大限度的并发执行 -- 例如，所有任务同时被启动执行并且不做任何等待。如果你想让任务按照一个特定的顺序执行，你需要做以下两件事：
 
-对于这些例子，我们假定你有两个任务，“1”和“2”，你特别想按照以下的顺序执行：
+- 当任务完成时给 gulp 一个提示。
+- 给 gulp 一个提示告诉 gulp 这个任务是依赖于另外一个任务的。
 
-1.在任务“1”中，你添加一个提示在任务完成时告诉它。或者是当完成的时候接收一个回调函数或者一个promise或者事件流，然后引擎将等待分开完成或者结束。
+举个例子，我们假定你有两个任务，"one" 和 "two"，你希望他们按照以下的顺序执行：
 
-2.任务“2”你添加一个提示告诉引擎，该因素决定于第一个任务的结束时间。
+1. 在任务 "one" 中添加一个提示告诉 gulp 此任务何时完成。可以选择接收一个回调函数并在任务执行完毕后调用此回调函数；也可以返回一个 promise 对象或者一个流（stream），然后由 gulp 等待 promise 被处理（resolve）或者流（stream）结束。
 
-所以这个例子将会是以下所示：
+2. 为任务 "two" 添加一个提示，告诉 gulp 该任务须在第一个任务执行完毕后才能执行。
 
+上述实例实现代码如下：
+
+```js
 var gulp = require('gulp');
 
-	// takes in a callback so the engine knows when it'll be done
-	gulp.task('one', function(cb) {
-	    // do stuff -- async or otherwise
-	    cb(err); // if err is not null and not undefined, the run will stop, and note that it failed
-	});
+// takes in a callback so the engine knows when it'll be done
+gulp.task('one', function(cb) {
+    // do stuff -- async or otherwise
+    cb(err); // if err is not null and not undefined, the run will stop, and note that it failed
+});
+
+// identifies a dependent task must be complete before this one begins
+gulp.task('two', ['one'], function() {
+    // task 'one' is done now
+});
+
+gulp.task('default', ['one', 'two']);
+```
+
+
+### gulp.watch(glob [, opts], tasks) or gulp.watch(glob [, opts, cb])
+
+如果被监视的文件发生了改变就执行某些动作。此方法永远返回一个可以发出 `change` 事件的 EventEmitter 对象。
+
+### gulp.watch(glob[, opts], tasks)
+
+#### glob
+类型：`String` 或 `Array`
+
+单个 glob 或 一组 glob，用于匹配需要监视的文件。
+
+#### opts
+类型：`Object`
+
+此参数将被传递给 [`gaze`](https://github.com/shama/gaze)。
+
+#### tasks
+类型：`Array`
+
+当文件改变时所需要运行的任务的名称（可以是多个任务），通过 `gulp.task()` 添加。
+
+```js
+var watcher = gulp.watch('js/**/*.js', ['uglify','reload']);
+watcher.on('change', function(event) {
+  console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+});
+```
+
+### gulp.watch(glob[, opts, cb])
+
+#### glob
+类型：`String` 或 `Array`
+
+单个 glob 或 一组 glob，用于匹配需要监视的文件。
+
+#### opts
+类型：`Object`
+
+此参数将被传递给 [`gaze`](https://github.com/shama/gaze)。
+
+#### cb(event)
+类型：`Function`
+
+当文件每次变化时都会调用此回调函数。
 	
-	// identifies a dependent task must be complete before this one begins
-	gulp.task('two', ['one'], function() {
-	    // task 'one' is done now
-	});
-	
-	gulp.task('default', ['one', 'two']);
+```js
+gulp.watch('js/**/*.js', function(event) {
+  console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+});
+```
 
-## gulp.watch(glob [,opts],tasks) or gulp.watch(glob [,opts,cb]) ##
+此回调函数接收一个对象类型的参数 -- `event`，它包含了此次文件改变所对应的信息：
 
-查看和编辑文件。这个常常会返回一个事件触发器用来发出改变的事件。
-
-## gulp.watch(glob[,opts],tasks) ##
-
-### glob ###
-
-类型：string 或者 array
-
-查看和编辑的单一的glob或者glob数组。
-
-### opts ###
-
-类型：object
-
-选项，传递给gaze
-
-### tascks ###
-
-类型：array
-
-文件改变所需要运行的任务名称，和gulp.tack()一同加载。
-
-	var watcher = gulp.watch('js/**/*.js', ['uglify','reload']);
-	watcher.on('change', function(event) {
-	  console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-	});
-
-## hulp.watch(glob[,opts,cb]) ##
-
-### glob ###
-
-类型：string 或者array
-
-查看和编辑的单一的glob或者glob数组。
-
-### opts ###
-
-类型：object
-
-选项，传递给gaze
-
-### cb(event) ###
-
-类型：function
-
-在每一个变化中会被获取的回调函数。
-	
-	gulp.watch('js/**/*.js', function(event) {
-	  console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-	});
-
-一个对象会传递一个回调函数，event描述了改变的内容：
-
-#### event.type ####
-
+##### event.type
 类型：string
 
-发生改变的类型，不管是添加，改变或是删除。
+已经发生的改变所对应的类型，可以是 `added`、`changed` 或 `deleted`。
 
-#### event.path ####
+##### event.path
+类型：`String`
 
-类型：string
+此路径指向触发事件的文件。
 
-触发事件的文件路径。
+
+[node-glob documentation]: https://github.com/isaacs/node-glob#options
+[node-glob]: https://github.com/isaacs/node-glob
+[glob-stream]: https://github.com/wearefractal/glob-stream
+[gulp-if]: https://github.com/robrich/gulp-if
+[Orchestrator]: https://github.com/robrich/orchestrator
+[glob2base]: https://github.com/wearefractal/glob2base
