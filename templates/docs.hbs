@@ -1,12 +1,7 @@
-{{#extend "layout"}}
+{{!< layout}}
 
-	{{#content content}}
-		<div class="docs-wrapper container">
-
-			<article class="yue">
-				{{{contents}}}
-			</article>
-		</div>
-	{{/content}}
-
-{{/extend}}
+<div class="docs-wrapper container">
+	<article class="yue" id="docs-content">
+		{{{contents}}}
+	</article>
+</div>

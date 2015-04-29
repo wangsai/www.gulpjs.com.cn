@@ -1,7 +1,7 @@
 'use strict';
 
 var Metalsmith = require('metalsmith');
-var templates = require('metalsmith-templates');
+var templates = require('metalsmith-hbs');
 var assets = require('metalsmith-assets');
 var markdown = require('metalsmith-markdownit');
 var each = require('metalsmith-each');
@@ -9,25 +9,13 @@ var extname = require('path').extname;
 var dirname = require('path').dirname;
 var cheerio = require('cheerio');
 var handlebars = require('handlebars');
-var layouts = require('handlebars-layouts');
-var registrar = require('handlebars-registrar');
+var helpers = require('handlebars-helpers');
 var inspect = require('util').inspect;
 var path = require('path');
 var _ = require('lodash');
 var clone = require('clone');
 
-//向 handlebars 注册 partial 文件
-registrar(handlebars, {
-  cwd: './templates',
-  partials: [
-    './partials/*.hbs',
-    './layout.hbs'
-  ]
-});
-
-//注册 layouts 插件。让模板可以实现继承等更多功能
-layouts(handlebars);
-
+helpers.register(handlebars, {marked:{}});  //注册更多有用的 helper
 
 //Processing flow is There!!!
 var metalsmith = Metalsmith(__dirname)
@@ -51,7 +39,7 @@ var metalsmith = Metalsmith(__dirname)
   .use(function(files, metalsmith, done){
     files['index.md'] = {
       contents: new Buffer(''),
-      template: 'marketing.hbs'
+      template: 'marketing'
     };
     done();
   })
@@ -75,10 +63,10 @@ var metalsmith = Metalsmith(__dirname)
 
   //应用模板
   .use(templates({
-    'engine': 'handlebars',
-    'directory': './templates',
-    'default': 'docs.hbs',
-    'pattern': '**/*.html'
+    'handlebars': handlebars,
+    'defaultTemplate': 'docs',
+    'pattern': '**/*.html',
+    'beautify': true
   }))
   
 
