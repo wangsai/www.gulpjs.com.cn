@@ -1,8 +1,10 @@
 ## 编译静态网站
 
+-1. 首先确保已经安装了 Node.js 和 npm
 0. 进入项目目录。
 1. 执行 `npm install` 下载依赖包。
-2. 执行 `node index` 生成静态网站，即 `_site` 目录。
+2. 执行 `npm install grunt-cli -g` 安装 grunt 
+2. 执行 `grunt` 生成静态网站，即 `_site` 目录。
 
 ## 文件用途
 
