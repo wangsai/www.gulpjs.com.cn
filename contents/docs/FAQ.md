@@ -14,7 +14,7 @@ gulp插件总是包含 `gulpplugin` 关键字. [搜索gulp插件][search-gulp-pl
 
 ## 我想编写一个gulp插件，从哪开始?
 
-查看 [编写gulp插件]wiki页面上的指南和例子来开始。
+查看 [编写gulp插件] wiki页面上的指南和例子来开始。
 
 ## 我插件的功能是 ____， 它是否过头了?
 
@@ -42,7 +42,7 @@ gulp的最新资讯可以在以下的twitter中找到:
 
 有, 在[Freenode]上用#gulpjs交流。
 
-[编写gulp插件]: /docs/writing-a-plugin/README.md
+[编写gulp插件]: ./writing-a-plugin/README.md
 [gulp介绍幻灯片]: http://slid.es/contra/gulp
 [Freenode]: http://freenode.net/
 [search-gulp-plugins]: http://gulpjs.com/plugins/
