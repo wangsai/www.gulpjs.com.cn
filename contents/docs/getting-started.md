@@ -38,7 +38,7 @@ $ gulp
 
 ## .src、.watch、.dest、.CLI 参数 -这些东西我该怎么使用？ 
 
-对于特定的API文档，你可以查询 [API文档](/docs/API.md)。
+对于特定的API文档，你可以查询 [API文档](API.md)。
 
 ## 可用插件 
 
