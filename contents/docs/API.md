@@ -29,7 +29,7 @@ gulp.src('client/templates/*.jade')
 
 通过 [glob-stream] 传送到 [node-glob] 的参数对象。
 
-gulp 除了支持 [node-glob 支持的参数][node-glob documentation] 和 [glob-stream] 支持的参数外，还额外增加了一些参数：
+gulp 除了支持 [node-glob 支持的参数] [node-glob documentation] 和 [glob-stream] 支持的参数外，还额外增加了一些参数：
 
 <a name="gulp.src-options.buffer"></a>
 #### options.buffer
@@ -287,9 +287,9 @@ gulp.watch('js/**/*.js', function(event) {
 此路径指向触发事件的文件。
 
 
-[node-glob documentation](https://github.com/isaacs/node-glob#options)  
-[node-glob](https://github.com/isaacs/node-glob)  
-[glob-stream](https://github.com/wearefractal/glob-stream)  
-[gulp-if](https://github.com/robrich/gulp-if)  
-[Orchestrator](https://github.com/robrich/orchestrator)  
-[glob2base](https://github.com/wearefractal/glob2base)  
+[node-glob documentation]:https://github.com/isaacs/node-glob#options 
+[node-glob]:https://github.com/isaacs/node-glob 
+[glob-stream]:https://github.com/wearefractal/glob-stream 
+[gulp-if]: https://github.com/robrich/gulp-if 
+[Orchestrator]:https://github.com/robrich/orchestrator 
+[glob2base]:https://github.com/wearefractal/glob2base 
