@@ -2,10 +2,10 @@
 
 如果你计划常见一个自己的Gulp插件，你需要花时间去阅读完整的说明文档。
 
-* [指南](/docs/writing-a-plugin/guidelines.md) (必读)
-* [使用缓存](/docs/writing-a-plugin/using-buffers.md)
-* [处理数据流](/docs/writing-a-plugin/dealing-with-streams.md)
-* [测试](/docs/writing-a-plugin/testing.md)
+* [指南](guidelines.md) (必读)
+* [使用缓存](using-buffers.md)
+* [处理数据流](dealing-with-streams.md)
+* [测试](testing.md)
 
 ## 插件是做什么的
 

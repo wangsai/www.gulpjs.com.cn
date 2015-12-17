@@ -5,7 +5,7 @@
 > Make sure to follow the best practice regarding error handling and add the line that make the gulp plugin re-emit the first error catched during the transformation of the content
 > 确保遵循关于错误处理的最佳实践
 
-[写插件](/docs/writing-a-plugin/README.md) > 写基于流的插件
+[写插件](README.md) > 写基于流的插件
 
 ## 流处理
 
