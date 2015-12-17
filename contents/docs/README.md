@@ -1,17 +1,17 @@
 # gulp 文档
 
-* [入门指南](/docs/getting-started.md)-如何学习gulp
-* [API 文档](/docs/API.md)-深入浅出学习gulp
-* [CLI 文档](/docs/CLI.md)-学习如何创建任务和使用编译器
-* [编写插件](/docs/writing-a-plugin/README.md)-正在编写一个gulp插件？这里有最基本的注意事项
+* [入门指南](./getting-started.md)-如何学习gulp
+* [API 文档](./API.md)-深入浅出学习gulp
+* [CLI 文档](./CLI.md)-学习如何创建任务和使用编译器
+* [编写插件](./writing-a-plugin/README.md)-正在编写一个gulp插件？这里有最基本的注意事项
 
 ## FAQ
 
-查看[FAQ](/docs/FAQ.md)来寻找常见问题的解答。
+查看[FAQ](./FAQ.md)来寻找常见问题的解答。
 
 ## 技巧
 
-社区已经有一些常见的gulp使用[技巧](/docs/recipes/README.md)。
+社区已经有一些常见的gulp使用[技巧](./recipes/README.md)。
 
 ## 还有问题？
 
