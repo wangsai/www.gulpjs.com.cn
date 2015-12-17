@@ -67,7 +67,7 @@ gulp.src('client/js/**/*.js', { base: 'client' })
 
 可以作为管道（pipe）传输或者写入生成。将传输进来的数据重新发出（emit）出去就可以通过管道（pipe）输出到多个文件夹。不存在的文件夹会被创建。
 
-```javascript
+```js
 gulp.src('./client/templates/*.jade')
   .pipe(jade())
   .pipe(gulp.dest('./build/templates'))
@@ -127,6 +127,7 @@ gulp.task('somename', function() {
 gulp.task('mytask', ['array', 'of', 'task', 'names'], function() {
   // Do stuff
 });
+```
 
 **注意：** 在从属任务完整前，你的任务是否提前执行完毕了？请确保你所依赖的任务是否正确的实现了异步：接收一个回调函数或者返回一个 promise 对象或者事件流（event stream）。
 
@@ -141,7 +142,7 @@ gulp.task('mytask', ['array', 'of', 'task', 'names'], function() {
 
 ##### 接收一个回调函数
 
-```javascript
+```js
 // run a command in a shell
 var exec = require('child_process').exec;
 gulp.task('jekyll', function(cb) {
@@ -166,7 +167,7 @@ gulp.task('somename', function() {
 
 ##### 返回一个 promise 对象
 
-```javascript
+```js
 var Q = require('q');
 
 gulp.task('somename', function() {
@@ -286,9 +287,9 @@ gulp.watch('js/**/*.js', function(event) {
 此路径指向触发事件的文件。
 
 
-[node-glob documentation]: https://github.com/isaacs/node-glob#options
-[node-glob]: https://github.com/isaacs/node-glob
-[glob-stream]: https://github.com/wearefractal/glob-stream
-[gulp-if]: https://github.com/robrich/gulp-if
-[Orchestrator]: https://github.com/robrich/orchestrator
-[glob2base]: https://github.com/wearefractal/glob2base
+[node-glob documentation](https://github.com/isaacs/node-glob#options)  
+[node-glob](https://github.com/isaacs/node-glob)  
+[glob-stream](https://github.com/wearefractal/glob-stream)  
+[gulp-if](https://github.com/robrich/gulp-if)  
+[Orchestrator](https://github.com/robrich/orchestrator)  
+[glob2base](https://github.com/wearefractal/glob2base)  
