@@ -2,7 +2,7 @@
 
 > Sticking to this curated list of recommended modules will make sure you don't violate the plugin guidelines and ensure consistency across plugins.
 
-[编写插件](/docs/writing-a-plugin/README.md) > 推荐模块
+[编写插件](README.md) > 推荐模块
 
 #### 替换文件扩展
 
